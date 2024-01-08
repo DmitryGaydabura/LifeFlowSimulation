@@ -27,11 +27,10 @@ git clone https://github.com/[YourUsername]/lifeflowsimulation.git
 
 cd lifeflowsimulation
 
-3. [Include additional steps specific to your project setup, like setting up a database, environment variables, etc.]
 
 ## Usage
 To run the project:
-1. [Specify how to start the server/application, e.g., using a command or an IDE]
+1. Build and run application in your IDE.
 2. Open `http://localhost:8080/game` in your browser to view the application.
 
 ## Contributing
