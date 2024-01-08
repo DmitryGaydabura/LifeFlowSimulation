@@ -40,7 +40,7 @@ body {
 }
 
 button {
-  background-color: #333;
+  background-color: #374955;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -51,7 +51,7 @@ button {
 }
 
 button:hover {
-  background-color: #555;
+  background-color: #374955;
 }
 
 input[type='number'] {
@@ -60,3 +60,23 @@ input[type='number'] {
   border: 1px solid #ddd;
   margin: 5px;
 }
+
+footer {
+  background-color: #555;
+  color: #fff;
+  padding: 5px 0;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
