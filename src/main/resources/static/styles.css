@@ -3,9 +3,13 @@ body {
   text-align: center;
   background-color: #FFD933;
   margin: 0;
-  padding: 0;
+  padding-bottom: 70px; /* Add padding equal to or more than the footer's height */
 }
 
+.content {
+  flex: 1; /* Makes the content expand to fill the available space */
+  padding-bottom: 10px; /* Space for footer */
+}
 
 
 
@@ -57,26 +61,38 @@ button:hover {
 input[type='number'] {
   padding: 5px;
   border-radius: 5px;
-  border: 1px solid #ddd;
+  border: 1px solid #fff;
   margin: 5px;
 }
 
-footer {
-  background-color: #555;
-  color: #fff;
-  padding: 5px 0;
-  text-align: center;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
 
 footer a {
-  color: #fff;
-  text-decoration: none;
+  margin: 0 10px; /* Add margin to separate links */
+  color: #fff; /* Set link color */
+  text-decoration: none; /* Remove underline from links */
 }
 
 footer a:hover {
-  text-decoration: underline;
+  text-decoration: underline; /* Add underline on hover for better UX */
 }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.main-content {
+  min-height: calc(100% - 100px); /* Adjust 60px to the height of your footer */
+  /* Other styling for main content */
+}
+
+footer {
+  height: 60px; /* Adjust as needed */
+  background-color: #333;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
