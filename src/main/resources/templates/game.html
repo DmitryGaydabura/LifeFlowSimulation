@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" type="text/css" href="/styles.css">
+  <title></title>
+  <!-- ... existing head content ... -->
+
+
+</head>
+<body>
+
+<pre>
+██╗     ██╗███████╗███████╗    ███████╗██╗      ██████╗ ██╗    ██╗    ███████╗██╗███╗   ███╗██╗   ██╗██╗      █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+██║     ██║██╔════╝██╔════╝    ██╔════╝██║     ██╔═══██╗██║    ██║    ██╔════╝██║████╗ ████║██║   ██║██║     ██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+██║     ██║█████╗  █████╗      █████╗  ██║     ██║   ██║██║ █╗ ██║    ███████╗██║██╔████╔██║██║   ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+██║     ██║██╔══╝  ██╔══╝      ██╔══╝  ██║     ██║   ██║██║███╗██║    ╚════██║██║██║╚██╔╝██║██║   ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+███████╗██║██║     ███████╗    ██║     ███████╗╚██████╔╝╚███╔███╔╝    ███████║██║██║ ╚═╝ ██║╚██████╔╝███████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+╚══════╝╚═╝╚═╝     ╚══════╝    ╚═╝     ╚══════╝ ╚═════╝  ╚══╝╚══╝     ╚══════╝╚═╝╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+</pre>
+<div class="settings">
+  <label for="rows">Rows:</label>
+  <input type="number" id="rows" value="20">
+  <label for="columns">Columns:</label>
+  <input type="number" id="columns" value="20">
+  <button onclick="generateGrid()">Generate Grid</button>
+  <button onclick="generateRandomGrid()">Randomize</button>
+</div>
+<div id="stats">
+  <p>Alive Cells: <span id="aliveCells">0</span></p>
+  <p>Dead Cells: <span id="deadCells">0</span></p>
+</div>
+
+
+<div id="grid"></div>
+
+<div class="controls">
+  <button onclick="startGame()">Start</button>
+  <button onclick="stopGame()">Stop</button>
+  <button onclick="simulateNextStep()">Next Step</button>
+  <button onclick="resetGame()">Reset</button>
+</div>
+
+
+<script>
+  let grid, initialState, simulationInterval;
+
+  function generateGrid() {
+    const rows = parseInt(document.getElementById('rows').value);
+    const columns = parseInt(document.getElementById('columns').value);
+    grid.innerHTML = ''; // Clear existing grid
+    initialState = []; // Reset initial state
+
+    for (let i = 0; i < rows; i++) {
+      let row = [];
+      for (let j = 0; j < columns; j++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.onclick = function () {
+          this.classList.toggle("alive");
+          row[j] = this.classList.contains("alive");
+        };
+        grid.appendChild(cell);
+        row.push(false);
+      }
+      initialState.push(row);
+    }
+
+    grid.style.gridTemplateColumns = `repeat(${columns}, 20px)`;
+    document.getElementById('aliveCells').textContent = "" + 0;
+    document.getElementById('deadCells').textContent = "" + rows * columns;
+  }
+
+  function startGame() {
+    if (simulationInterval) {
+      clearInterval(simulationInterval); // Clear existing interval if it exists
+    }
+
+    // Send initial state to the server
+    fetch('/initialize', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({initialState: initialState})
+    }).then(() => {
+      simulationInterval = setInterval(simulateNextStep, 100); // Set new interval
+    });
+  }
+
+  function stopGame() {
+    if (simulationInterval) {
+      clearInterval(simulationInterval); // Clear the interval
+      simulationInterval = null;
+    }
+  }
+
+  function resetGame() {
+    fetch('/reset', {method: 'POST'})
+    .then(() => {
+      if (simulationInterval) {
+        clearInterval(simulationInterval);
+        simulationInterval = null;
+      }
+      generateGrid(); // Re-generate the grid
+    });
+  }
+
+  function simulateNextStep() {
+    // AJAX call to get the next state
+    fetch('/nextStep')
+    .then(response => response.json())
+    .then(data => {
+      updateGrid(data);
+    });
+  }
+
+  function updateGrid(newState) {
+    let aliveCount = 0;
+    let deadCount = 0;
+
+    for (let i = 0; i < newState.length; i++) {
+      for (let j = 0; j < newState[i].length; j++) {
+        const cell = grid.children[i * newState[i].length + j];
+        if (newState[i][j]) {
+          cell.classList.add("alive");
+          aliveCount++;
+        } else {
+          cell.classList.remove("alive");
+          deadCount++;
+        }
+      }
+    }
+
+    // Update statistics
+    document.getElementById('aliveCells').textContent = aliveCount;
+    document.getElementById('deadCells').textContent = deadCount;
+  }
+
+  function generateRandomGrid() {
+    const rows = parseInt(document.getElementById('rows').value);
+    const columns = parseInt(document.getElementById('columns').value);
+    grid.innerHTML = '';
+    initialState = [];
+
+    let aliveCount = 0;
+    let deadCount = 0;
+
+    for (let i = 0; i < rows; i++) {
+      let row = [];
+      for (let j = 0; j < columns; j++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        const isAlive = Math.random() < 0.5;
+        if (isAlive) {
+          cell.classList.add("alive");
+          aliveCount++;
+        } else {
+          deadCount++;
+        }
+        cell.onclick = function () {
+          this.classList.toggle("alive");
+          row[j] = this.classList.contains("alive");
+          updateStats(); // Call updateStats function to refresh statistics
+        };
+        grid.appendChild(cell);
+        row.push(isAlive);
+      }
+      initialState.push(row);
+    }
+
+    grid.style.gridTemplateColumns = `repeat(${columns}, 20px)`;
+    updateStats(); // Update the statistics after generating the grid
+
+    // Function to update the statistics
+    function updateStats() {
+      document.getElementById('aliveCells').textContent = aliveCount;
+      document.getElementById('deadCells').textContent = deadCount;
+    }
+  }
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+    grid = document.getElementById('grid'); // Assign grid element after DOM is loaded
+    generateGrid(); // Generate the initial grid on page load
+  });
+</script>
+</body>
+</html>

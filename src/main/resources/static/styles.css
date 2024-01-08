@@ -1,0 +1,62 @@
+body {
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  background-color: #FFD933;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+
+.selectors-container, .grid-container, .buttons-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.settings, .controls {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#grid {
+  display: grid;
+  margin: 0 auto; /* Center the grid horizontally */
+  grid-gap: 2px;
+  justify-content: center; /* Center grid items */
+}
+
+.cell {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  background-color: #374955;
+  transition: background-color 0.3s ease;
+}
+
+.cell.alive {
+  background-color: #F62A66;
+}
+
+button {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #555;
+}
+
+input[type='number'] {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  margin: 5px;
+}
