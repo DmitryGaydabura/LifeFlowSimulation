@@ -1,4 +1,4 @@
-# Life Flow Simulation
+![Life Flow Simulation](assets/app.gif)
 
 ## Description
 Life Flow Simulation is an interactive web application based on the classic "Game of Life" cellular automaton devised by the British mathematician John Horton Conway in 1970. This project provides a platform to observe the evolution of a grid-based cell system following a set of simple rules.
