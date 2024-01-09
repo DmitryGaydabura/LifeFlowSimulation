@@ -113,17 +113,17 @@ public class Grid {
   }
 
   public Cell findCell(int x, int y) {
-    x = (x + numberOfColumns) % numberOfColumns;
-    y = (y + numberOfRows) % numberOfRows;
+    // Wrap around if the coordinates are outside the grid bounds
+    int wrappedX = (x + numberOfColumns) % numberOfColumns;
+    int wrappedY = (y + numberOfRows) % numberOfRows;
 
-    for (Cell cell : cells) {
-      if (cell.getXvalue() == x && cell.getYvalue() == y) {
-        return cell;
-      }
-    }
+    // Since cells are stored in a list, calculate the index for the wrapped coordinates
+    int index = wrappedY * numberOfColumns + wrappedX;
 
-    return null;
+    // Return the cell at the calculated index
+    return cells.get(index);
   }
+
 
   public String simulateNSteps(int numberOfSteps) {
     StringBuilder sb = new StringBuilder();
