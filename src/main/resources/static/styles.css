@@ -2,8 +2,7 @@ body {
   font-family: 'Arial', sans-serif;
   text-align: center;
   background-color: #FFD933;
-  margin: 0;
-  padding-bottom: 70px; /* Add padding equal to or more than the footer's height */
+  margin: 0; /* Add padding equal to or more than the footer's height */
 }
 
 .content {
@@ -82,17 +81,157 @@ html, body {
 }
 
 .main-content {
-  min-height: calc(100% - 100px); /* Adjust 60px to the height of your footer */
+  min-height: calc(100% - 60px); /* Adjust 60px to the height of your footer */
   /* Other styling for main content */
 }
 
+
 footer {
   height: 60px; /* Adjust as needed */
-  background-color: #333;
+  background-color: #374955;
   color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #374955;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #bda025;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #bda025;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #000000;
+  border-top: none;
+}
+
+/* Center the game container horizontally */
+.game-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid-container {
+  /* Add your grid styling here */
+  /* Example:
+  display: grid;
+  grid-template-columns: repeat(20, 20px);
+  grid-gap: 2px;
+  */
+}
+
+.rules-table {
+  margin-left: 20px; /* Adjust the margin to move the table to the right */
+  max-width: 400px; /* Adjust the width of the rules table */
+}
+
+.rules-table h2 {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.rules-table table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e1e1e1;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rules-table th, .rules-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.rules-table th {
+  background-color: #374955;
+  color: #fff;
+}
+
+.rules-table td {
+  background-color: #fff;
+  color: #333;
+}
+
+/* Hover effect for table rows */
+.rules-table tr:hover {
+  background-color: #f4f4f4;
+}
+
+.statistics-table {
+  margin-left: 20px; /* Adjust the margin to move the table to the right */
+  max-width: 400px; /* Adjust the width of the statistics table */
+}
+
+.statistics-table h2 {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.statistics-table table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e1e1e1;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.statistics-table th, .statistics-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.statistics-table th {
+  background-color: #374955;
+  color: #fff;
+}
+
+.statistics-table td {
+  background-color: #fff;
+  color: #333;
+}
+
+/* Hover effect for table rows */
+.statistics-table tr:hover {
+  background-color: #f4f4f4;
+}
+
+
+
+
+
 
 
