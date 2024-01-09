@@ -3,9 +3,6 @@
 <head>
   <link rel="stylesheet" type="text/css" href="/styles.css">
   <title></title>
-  <!-- ... existing head content ... -->
-
-
 </head>
 <body>
 
@@ -27,6 +24,11 @@
     <button onclick="generateGrid()">Generate Grid</button>
     <button onclick="generateRandomGrid()">Randomize</button>
   </div>
+
+  <div class="speed-control">
+    <label for="speed">Speed :</label>
+    <input type="range" id="speed" min="100" max="1000" value="500">
+  </div>
   <div id="stats">
     <p>Alive Cells: <span id="aliveCells">0</span></p>
     <p>Dead Cells: <span id="deadCells">0</span></p>
@@ -46,7 +48,7 @@
 
 
 <script>
-  let grid, initialState, simulationInterval;
+  let grid, initialState, simulationInterval, currentSpeed = 500;
 
   function generateGrid() {
     const rows = parseInt(document.getElementById('rows').value);
@@ -70,8 +72,6 @@
     }
 
     grid.style.gridTemplateColumns = `repeat(${columns}, 20px)`;
-    document.getElementById('aliveCells').textContent = "" + 0;
-    document.getElementById('deadCells').textContent = "" + rows * columns;
   }
 
   function startGame() {
@@ -79,13 +79,16 @@
       clearInterval(simulationInterval); // Clear existing interval if it exists
     }
 
+    // Get the current speed from the speed control
+    currentSpeed = parseInt(document.getElementById('speed').value);
+
     // Send initial state to the server
     fetch('/initialize', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({initialState: initialState})
     }).then(() => {
-      simulationInterval = setInterval(simulateNextStep, 100); // Set new interval
+      simulationInterval = setInterval(simulateNextStep, currentSpeed); // Set new interval with current speed
     });
   }
 
@@ -114,6 +117,11 @@
     .then(data => {
       updateGrid(data);
     });
+
+    if (simulationInterval) {
+      clearInterval(simulationInterval);
+      simulationInterval = setInterval(simulateNextStep, currentSpeed);
+    }
   }
 
   function updateGrid(newState) {
@@ -122,14 +130,12 @@
 
     for (let i = 0; i < newState.length; i++) {
       for (let j = 0; j < newState[i].length; j++) {
-        const cell = grid.children[i * newState[i].length + j];
-        if (newState[i][j]) {
-          cell.classList.add("alive");
-          aliveCount++;
-        } else {
-          cell.classList.remove("alive");
-          deadCount++;
-        }
+        const index = i * newState[i].length + j;
+        const cell = grid.children[index];
+        const isAlive = newState[i][j];
+
+        cell.classList.toggle("alive", isAlive);
+        isAlive ? aliveCount++ : deadCount++;
       }
     }
 
@@ -182,7 +188,7 @@
 
 
   document.addEventListener('DOMContentLoaded', function () {
-    grid = document.getElementById('grid'); // Assign grid element after DOM is loaded
+    grid = document.getElementById('grid'); // Ensure this refers to the correct grid element in your HTML
     generateGrid(); // Generate the initial grid on page load
   });
 </script>
