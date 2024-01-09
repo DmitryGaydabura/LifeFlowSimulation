@@ -14,10 +14,10 @@ public class Grid {
   @Getter
   private List<Cell> cells;
 
-  public Grid(int numberOfrows, int numberOfColumns) {
-    this.numberOfRows = numberOfrows;
+  public Grid(int numberOfRows, int numberOfColumns) {
+    this.numberOfRows = numberOfRows;
     this.numberOfColumns = numberOfColumns;
-    this.totalCells = numberOfColumns * numberOfrows;
+    this.totalCells = numberOfColumns * numberOfRows;
     this.cells = new ArrayList<>();
   }
 
@@ -58,25 +58,17 @@ public class Grid {
   }
 
   public void simulateNextStep() {
-    List<Cell> nextCells = new ArrayList<>();
+    List<Cell> nextCells = new ArrayList<>(totalCells);
 
     for (Cell cell : cells) {
       int liveNeighbors = countLiveNeighbors(cell);
-      boolean nextState;
-
-      if (cell.getLive()) {
-        // Live cell with 2 or 3 live neighbors stays alive, else dies
-        nextState = liveNeighbors == 2 || liveNeighbors == 3;
-      } else {
-        // Dead cell with exactly 3 live neighbors becomes alive
-        nextState = liveNeighbors == 3;
-      }
-
+      boolean nextState = cell.getLive() ? (liveNeighbors == 2 || liveNeighbors == 3) : (liveNeighbors == 3);
       nextCells.add(new Cell(cell.getXvalue(), cell.getYvalue(), nextState));
     }
 
     this.cells = nextCells;
   }
+
 
 
 
