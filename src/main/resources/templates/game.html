@@ -15,40 +15,113 @@
 ╚══════╝╚═╝╚═╝     ╚══════╝    ╚═╝     ╚══════╝ ╚═════╝  ╚══╝╚══╝     ╚══════╝╚═╝╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
 </pre>
 
-<div class="main-content">
-  <div class="settings">
-    <label for="rows">Rows:</label>
-    <input type="number" id="rows" value="20">
-    <label for="columns">Columns:</label>
-    <input type="number" id="columns" value="20">
-    <button onclick="generateGrid()">Generate Grid</button>
-    <button onclick="generateRandomGrid()">Randomize</button>
+<div class="tab">
+  <button class="tablinks" onclick="openTab(event, 'GameOfLife')" id="defaultOpen">Conway's Game of Life</button>
+  <button class="tablinks" onclick="openTab(event, 'NewSimulation')">New Simulation</button>
+</div>
+
+<div id="GameOfLife" class="tabcontent">
+  <div class="main-content">
+    <div class="settings">
+      <label for="rows">Rows:</label>
+      <input type="number" id="rows" value="20">
+      <label for="columns">Columns:</label>
+      <input type="number" id="columns" value="20">
+      <button onclick="generateGrid()">Generate Grid</button>
+      <button onclick="generateRandomGrid()">Randomize</button>
+    </div>
+
+    <div class="speed-control">
+      <label for="speed">Speed :</label>
+      <input type="range" id="speed" min="100" max="1000" value="100">
+    </div>
+
+    <div class="controls">
+      <button onclick="startGame()">Start</button>
+      <button onclick="stopGame()">Stop</button>
+      <button onclick="simulateNextStep()">Next Step</button>
+      <button onclick="resetGame()">Reset</button>
+    </div>
   </div>
 
-  <div class="speed-control">
-    <label for="speed">Speed :</label>
-    <input type="range" id="speed" min="100" max="1000" value="500">
-  </div>
-  <div id="stats">
-    <p>Alive Cells: <span id="aliveCells">0</span></p>
-    <p>Dead Cells: <span id="deadCells">0</span></p>
-  </div>
+  <div class="game-container">
+    <div class="grid-container">
+      <div id="grid"></div>
+    </div>
+    <div class="table-container">
+      <div class="statistics-table">
+        <h2>Statistics</h2>
+        <table>
+          <tr>
+            <th>Category</th>
+            <th>Value</th>
+          </tr>
+          <tr>
+            <td>Total Cells</td>
+            <td id="totalCells">0</td>
+          </tr>
+          <tr>
+            <td>Alive Cells</td>
+            <td id="aliveCells">0</td>
+          </tr>
+          <tr>
+            <td>Dead Cells</td>
+            <td id="deadCells">0</td>
+          </tr>
+          <tr>
+            <td>Generation</td>
+            <td id="generation">0</td>
+          </tr>
+        </table>
+      </div>
 
-
-  <div id="grid"></div>
-
-  <div class="controls">
-    <button onclick="startGame()">Start</button>
-    <button onclick="stopGame()">Stop</button>
-    <button onclick="simulateNextStep()">Next Step</button>
-    <button onclick="resetGame()">Reset</button>
+      <div class="rules-table">
+        <h2>Rules of Conway's Game of Life</h2>
+        <table>
+          <tr>
+            <th>Rule</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>Birth</td>
+            <td>A dead cell with exactly 3 live neighbors becomes a live cell.</td>
+          </tr>
+          <tr>
+            <td>Survival</td>
+            <td>A live cell with 2 or 3 live neighbors stays alive.</td>
+          </tr>
+          <tr>
+            <td>Death</td>
+            <td>A live cell with fewer than 2 or more than 3 live neighbors dies.</td>
+          </tr>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
+
+<!-- Additional tab contents will go here -->
+<div id="NewSimulation" class="tabcontent">
+  <!-- Blank content for new tab -->
+</div>
+
+
 
 
 
 <script>
   let grid, initialState, simulationInterval, currentSpeed = 500;
+  let totalCells = 0;
+  let aliveCells = 0;
+  let deadCells = 0;
+  let generation = 0;
+
+  function updateStatistics() {
+    document.getElementById('totalCells').textContent = totalCells;
+    document.getElementById('aliveCells').textContent = aliveCells;
+    document.getElementById('deadCells').textContent = deadCells;
+    document.getElementById('generation').textContent = generation;
+  }
 
   function generateGrid() {
     const rows = parseInt(document.getElementById('rows').value);
@@ -70,6 +143,13 @@
       }
       initialState.push(row);
     }
+    totalCells = rows * columns;
+    aliveCells = 0;
+    deadCells = totalCells;
+    generation = 0;
+
+    // Update the statistics table
+    updateStatistics();
 
     grid.style.gridTemplateColumns = `repeat(${columns}, 20px)`;
   }
@@ -142,6 +222,8 @@
     // Update statistics
     document.getElementById('aliveCells').textContent = aliveCount;
     document.getElementById('deadCells').textContent = deadCount;
+    generation++;
+    updateStatistics();
   }
 
   function generateRandomGrid() {
@@ -186,10 +268,39 @@
     }
   }
 
+  function openTab(evt, tabName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+
+  // Open the default tab
+  document.getElementById("defaultOpen").click();
+
+
 
   document.addEventListener('DOMContentLoaded', function () {
-    grid = document.getElementById('grid'); // Ensure this refers to the correct grid element in your HTML
+    // Assign grid element after DOM is loaded
+    grid = document.getElementById('grid');
     generateGrid(); // Generate the initial grid on page load
+
+    // Initialize tabs
+    document.getElementById("defaultOpen").click();
   });
 </script>
 <footer>
